@@ -1,7 +1,14 @@
+import ApiError from "../utils/apiError.js";
 import PromiseHandle from "../utils/promiseHandle.js";
 
 export const login = PromiseHandle(async (request, response, next) => {
-  return response.status(200).send("Login");
+  const { email, password } = request.body;
+  if (!(email && password)) {
+    return response
+      .status(401)
+      .json(new ApiError(401, "Email and Password is Requried",));
+    // throw new ApiError(401, "Email and Password is Requried");
+  }
 });
 
 export const signUp = PromiseHandle(async (request, response, next) => {

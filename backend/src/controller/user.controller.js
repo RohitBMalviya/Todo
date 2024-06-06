@@ -5,9 +5,8 @@ export const login = PromiseHandle(async (request, response, next) => {
   const { email, password } = request.body;
   if (!(email && password)) {
     return response
-      .status(401)
-      .json(new ApiError(401, "Email and Password is Requried",));
-    // throw new ApiError(401, "Email and Password is Requried");
+      .status(400)
+      .json(new ApiError(400, "Email and Password is Requried"));
   }
 });
 

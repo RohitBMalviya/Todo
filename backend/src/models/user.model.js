@@ -4,21 +4,57 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      unique: [true, "Please Enter Unique username"],
+      unique: [true, "Please enter unique Username"],
     },
     email: {
       type: String,
       required: true,
       trim: true,
+      validate: {
+        validator: function (email) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        },
+        message: "Invalid email address formate",
+      },
     },
     password: {
       type: String,
       required: true,
-      minLenth: [true, "Please Enter the atleast 8 Character Password"],
+      minLength: [
+        8,
+        "Please enter the atleast 8 Character Password ,got {VALUE}",
+      ],
+      maxLength: [
+        16,
+        "Password cannot exist 16 character Password ,got {VALUE}",
+      ],
+      validate: {
+        validator: function (password) {
+          return /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/.test(
+            password
+          );
+        },
+        message: "Invalid password formate",
+      },
     },
     confirm_password: {
       type: String,
-      minLenth: [true, "Please Enter the atleast 8 Character Password"],
+      validate: {
+        validator: function (confirm_password) {
+          return /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/.test(
+            confirm_password
+          );
+        },
+        message: "Invalid password formate",
+      },
+      minLength: [
+        8,
+        "Please enter the atleast 8 character Password ,got {VALUE}",
+      ],
+      maxLength: [
+        16,
+        "Password cannot Exist 16 character Password ,got {VALUE}",
+      ],
     },
     role: {
       type: String,

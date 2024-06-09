@@ -1,0 +1,11 @@
+export const PORT = process.env.PORT;
+export const MONGOOOSEURL = process.env.MONGOOOSEURL;
+export const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+export const REFRESH_TOKEN_EXPIRE = process.env.REFRESH_TOKEN_EXPIRE;
+export const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+export const ACCESS_TOKEN_EXPIRY = process.env.ACCESSH_TOKE_EXPIRY;
+export const MAIL_HOST = process.env.MAIL_HOST;
+export const MAIL_PORT = Number(process.env.MAIL_PORT);
+export const MAIL_USER = process.env.MAIL_USER;
+export const MAIL_PASS = process.env.MAIL_PASS;
+export const DOMAIN_NAME = process.env.DOMAIN_NAME;

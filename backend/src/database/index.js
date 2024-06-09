@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
+import { config } from "../utils/index.js";
 
 async function connect() {
   try {
-    const connectMongoose = await mongoose.connect(
-      `${process.env.MONGOOOSEURL}`
-    );
+    const connectMongoose = await mongoose.connect(`${config.MONGOOOSEURL}`);
 
     console.log(
       `Database Connected Successfully DB Host: ${connectMongoose.connection.host}`

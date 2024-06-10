@@ -51,7 +51,7 @@ export const signUp = PromiseHandle(async (request, response, _) => {
     );
 });
 
-export const verifyUser = PromiseHandle(async (request, response, next) => {
+export const verifyUser = PromiseHandle(async (request, response, _) => {
   const { token } = request.query;
   const user = await User.findOne({
     verifiedToken: token,
@@ -64,7 +64,7 @@ export const verifyUser = PromiseHandle(async (request, response, next) => {
   }
   user.isVerified = true;
   user.verifiedToken = undefined;
-  user.verifiedToken = undefined;
+  user.verifiedTokenExpire = undefined;
   await user.save({ validateBeforeSave: false });
   return response
     .status(200)
@@ -101,6 +101,11 @@ export const login = PromiseHandle(async (request, response, _) => {
         )
       );
   }
+  if (!user.isVerified) {
+    return response
+      .status(401)
+      .json(new ApiError(401, "Please verify first to login."));
+  }
   const options = {
     httpOnly: true,
     secure: true,
@@ -127,38 +132,66 @@ export const login = PromiseHandle(async (request, response, _) => {
     .json(new ApiResponse(200, loginUser, "User login successfully. !!!"));
 });
 
-export const logout = PromiseHandle(async (request, response, next) => {
-  return response.status(200).send("Logout");
-});
-
-export const getUserDetail = PromiseHandle(async (request, response, next) => {
-  return response.status(200).send("Get User Detail");
-});
-
-export const updateUserDetail = PromiseHandle(
-  async (request, response, next) => {
-    return response.status(200).send("Update User Detail");
+export const logout = PromiseHandle(async (request, response, _) => {
+  const userId = request.body;
+  const user = await User.findById(userId);
+  if (!user) {
+    return response.status(404).json(new ApiError(404, "User not found."));
   }
-);
+  user.accessToken = undefined;
+  user.refreshToken = undefined;
+  await user.save({ validateBeforeSave: false });
+  return response
+    .clearCookie("accessToken")
+    .clearCookie("refreshToken")
+    .status(200)
+    .json(new ApiResponse(200, {}, "User logout successfully. !!!"));
+});
 
-export const updatePassword = PromiseHandle(async (request, response, next) => {
+export const getUserDetail = PromiseHandle(async (request, response, _) => {
+  const userId = request.body;
+  const user = await User.findById(userId);
+  if (!user) {
+    return response.status(404).json(new ApiError(404, "User not found."));
+  }
+  return response
+    .status(200)
+    .json(new ApiResponse(200, user, "User data fetch successfully. !!!"));
+});
+
+export const updateUserDetail = PromiseHandle(async (request, response, _) => {
+  const { username } = request.body;
+  const userId = request.body;
+  const user = await User.findByIdAndUpdate(
+    userId,
+    {
+      $set: { username: username },
+    },
+    { new: true }
+  ).select("-password");
+  return response
+    .status(200)
+    .json(new ApiResponse(200, user, "User detail updated successfully. !!!"));
+});
+
+export const updatePassword = PromiseHandle(async (request, response, _) => {
   return response.status(200).send("Update Password");
 });
 
-export const forgotPassword = PromiseHandle(async (request, response, next) => {
+export const forgotPassword = PromiseHandle(async (request, response, _) => {
   return response.status(200).send("Forgot Password");
 });
 
 // Admin
 
-export const deleteUser = PromiseHandle(async (request, response, next) => {
+export const deleteUser = PromiseHandle(async (request, response, _) => {
   return response.status(200).send("Delete User");
 });
 
-export const updateRole = PromiseHandle(async (request, response, next) => {
+export const updateRole = PromiseHandle(async (request, response, _) => {
   return response.status(200).send("Update Role");
 });
 
-export const getAllUser = PromiseHandle(async (request, response, next) => {
+export const getAllUser = PromiseHandle(async (request, response, _) => {
   return response.status(200).send("Get All User");
 });

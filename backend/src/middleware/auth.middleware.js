@@ -15,7 +15,7 @@ export default async function auth(request, _, next) {
     if (!user) {
       throw new ApiError(404, "User not found.");
     }
-    request.body = user;
+    request.user = user._id;
     next();
   } catch (error) {
     throw new ApiError(401, error?.message || "Invalid Access Token");

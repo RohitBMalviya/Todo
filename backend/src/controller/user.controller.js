@@ -133,7 +133,7 @@ export const login = PromiseHandle(async (request, response, _) => {
 });
 
 export const logout = PromiseHandle(async (request, response, _) => {
-  const userId = request.body;
+  const userId = request.user;
   const user = await User.findById(userId);
   if (!user) {
     return response.status(404).json(new ApiError(404, "User not found."));
@@ -149,7 +149,7 @@ export const logout = PromiseHandle(async (request, response, _) => {
 });
 
 export const getUserDetail = PromiseHandle(async (request, response, _) => {
-  const userId = request.body;
+  const userId = request.user;
   const user = await User.findById(userId);
   if (!user) {
     return response.status(404).json(new ApiError(404, "User not found."));
@@ -161,7 +161,7 @@ export const getUserDetail = PromiseHandle(async (request, response, _) => {
 
 export const updateUserDetail = PromiseHandle(async (request, response, _) => {
   const { username } = request.body;
-  const userId = request.body;
+  const userId = request.user;
   const user = await User.findByIdAndUpdate(
     userId,
     {
@@ -175,7 +175,30 @@ export const updateUserDetail = PromiseHandle(async (request, response, _) => {
 });
 
 export const updatePassword = PromiseHandle(async (request, response, _) => {
-  return response.status(200).send("Update Password");
+  const { password, newpassword, confirm_password } = request.body;
+  const userId = request.user;
+  const user = await User.findById(userId);
+  const checkPassword = await user.compareGenerateHashPassword(password);
+  if (!checkPassword) {
+    return response
+      .status(401)
+      .json(
+        new ApiError(401, "old Password does not match please enter again.")
+      );
+  }
+  if (newpassword !== confirm_password) {
+    return response
+      .status(401)
+      .json(new ApiError(401, "Password does not match please enter again."));
+  }
+  user.password = newpassword;
+  user.confirm_password = confirm_password;
+  await user.save();
+  return response
+    .status(200)
+    .json(
+      new ApiResponse(200, user, "User password updated successfully. !!!")
+    );
 });
 
 export const forgotPassword = PromiseHandle(async (request, response, _) => {

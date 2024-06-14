@@ -191,6 +191,7 @@ export const updatePassword = PromiseHandle(async (request, response, _) => {
       .status(401)
       .json(new ApiError(401, "Password does not match please enter again."));
   }
+  user.validateSync();
   user.password = newpassword;
   user.confirm_password = confirm_password;
   await user.save();
@@ -202,7 +203,35 @@ export const updatePassword = PromiseHandle(async (request, response, _) => {
 });
 
 export const forgotPassword = PromiseHandle(async (request, response, _) => {
-  return response.status(200).send("Forgot Password");
+  const { password, confirm_password } = request.body;
+  const userId = request.user;
+  const user = await User.findById(userId);
+  if (!user) {
+    return response
+      .status(404)
+      .json(new ApiError(404, "User does not exists."));
+  }
+  const emailType = "FORGOT";
+  await sendMail(user._id, user.email, emailType);
+  const token = request.query;
+  const checkPasswordValidity = await User.findOne({
+    forgotPasswordToken: token,
+    forgotPasswordTokenExpire: { $gt: Date.now() },
+  });
+  if (!checkPasswordValidity) {
+    return response
+      .status(400)
+      .json(new ApiError(400, "Time out or token expired please try again."));
+  }
+  checkPasswordValidity.validateSync();
+  checkPasswordValidity.forgotPasswordToken = undefined;
+  checkPasswordValidity.forgotPasswordTokenExpire = undefined;
+  checkPasswordValidity.password = password;
+  checkPasswordValidity.confirm_password = confirm_password;
+  await checkPasswordValidity.save();
+  return response
+    .status(201)
+    .json(new ApiResponse(201, {}, "User password updated successfully. !!!"));
 });
 
 // Admin

@@ -11,12 +11,13 @@ import store from "./store/store";
 import App from "./App.jsx";
 import Login from "./pages/login.jsx";
 import Register from "./pages/register.jsx";
+import "./global.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/signup" element={<Register />} />
     </Route>
   )
 );

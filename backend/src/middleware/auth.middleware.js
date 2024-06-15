@@ -8,14 +8,14 @@ export default async function auth(request, _, next) {
       request.cookies?.accessToken ||
       request.header("Authorization")?.replace("Bearer", "");
     if (!token) {
-      throw new ApiError(404, "Token not found or expired.");
+      throw new ApiError(404, "Token does not exists or expired.");
     }
     const decodeToken = JWT.verify(token, config.ACCESS_TOKEN);
     const user = await User.findById(decodeToken._id).select("-password");
     if (!user) {
       throw new ApiError(404, "User not found.");
     }
-    request.user = user._id;
+    request.user = user;
     next();
   } catch (error) {
     throw new ApiError(401, error?.message || "Invalid Access Token");

@@ -1,4 +1,4 @@
 import auth from "./auth.middleware.js";
-import authRole from "./role.middleware.js";
+import admin from "./admin.middleware.js";
 
-export { auth, authRole };
+export { auth, admin };

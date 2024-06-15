@@ -11,17 +11,16 @@ userRouter.route("/logout").post(auth, UserController.logout);
 userRouter.route("/get-detail").get(auth, UserController.getUserDetail);
 userRouter.route("/update-detail").patch(auth, UserController.updateUserDetail);
 userRouter.route("/update-password").patch(auth, UserController.updatePassword);
+userRouter.route("/delete-account").delete(auth, UserController.deleteAccount);
 userRouter.route("/forgot-password").post(UserController.forgotPassword);
 userRouter.route("/reset-password").patch(UserController.resetPassword);
 userRouter.route("/refresh-token").patch(UserController.refreshToken);
 
 // Admin
 userRouter
-  .route("/get-single-user")
+  .route("/get-single-user/:id")
   .get(auth, admin, UserController.getSingleUser);
-userRouter
-  .route("/get-all-user/:id")
-  .get(auth, admin, UserController.getAllUser);
+userRouter.route("/get-all-user/").get(auth, admin, UserController.getAllUser);
 userRouter
   .route("/update-role/:id")
   .patch(auth, admin, UserController.updateRole);

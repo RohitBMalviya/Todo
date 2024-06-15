@@ -250,7 +250,13 @@ export const resetPassword = PromiseHandle(async (request, response, _) => {
     .json(new ApiResponse(200, {}, "User password reset successfully. !!!"));
 });
 
-export const refreshToken = PromiseHandle(async (request, response, _) => {});
+export const deleteAccount = PromiseHandle(async (request, response, _) => {
+  const userId = request.user;
+  await User.findByIdAndDelete(userId._id);
+  return response
+    .status(200)
+    .json(new ApiResponse(200, {}, "User account deleted successfully. !!!"));
+});
 
 // Admin
 

@@ -258,8 +258,6 @@ export const deleteAccount = PromiseHandle(async (request, response, _) => {
     .json(new ApiResponse(200, {}, "User account deleted successfully. !!!"));
 });
 
-export const refreshToken = PromiseHandle(async (request, response, _) => {});
-
 // Admin
 
 export const getAllUser = PromiseHandle(async (request, response, _) => {

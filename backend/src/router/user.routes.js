@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserController } from "../controller/index.js";
-import { auth, authRole } from "../middleware/index.js";
+import { auth, admin } from "../middleware/index.js";
 
 const userRouter = Router();
 
@@ -11,17 +11,22 @@ userRouter.route("/logout").post(auth, UserController.logout);
 userRouter.route("/get-detail").get(auth, UserController.getUserDetail);
 userRouter.route("/update-detail").patch(auth, UserController.updateUserDetail);
 userRouter.route("/update-password").patch(auth, UserController.updatePassword);
-userRouter.route("/forgot-password").get(auth, UserController.forgotPassword);
+userRouter.route("/forgot-password").post(UserController.forgotPassword);
+userRouter.route("/reset-password").patch(UserController.resetPassword);
+userRouter.route("/refresh-token").patch(UserController.refreshToken);
 
 // Admin
 userRouter
-  .route("/update-role")
-  .patch(auth, authRole, UserController.updateRole);
+  .route("/get-single-user")
+  .get(auth, admin, UserController.getSingleUser);
 userRouter
-  .route("/delete-user")
-  .delete(auth, authRole, UserController.deleteUser);
+  .route("/get-all-user/:id")
+  .get(auth, admin, UserController.getAllUser);
 userRouter
-  .route("/get-all-user")
-  .delete(auth, authRole, UserController.getAllUser);
+  .route("/update-role/:id")
+  .patch(auth, admin, UserController.updateRole);
+userRouter
+  .route("/delete-user/:id")
+  .delete(auth, admin, UserController.deleteUser);
 
 export default userRouter;

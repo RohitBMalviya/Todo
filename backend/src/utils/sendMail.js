@@ -41,9 +41,9 @@ export default async function sendMail(user_id, email, emailType) {
       <br/>
       <p>${config.DOMAIN_NAME}/users/verify-user?token=${hashToken}</p>`
           : `
-      <a href="${config.DOMAIN_NAME}/users/forgot-password?token=${hashToken}">Here</a>
+      <a href="${config.DOMAIN_NAME}/users/reset-password?token=${hashToken}">Here</a>
       <br/>
-      <p>${config.DOMAIN_NAME}/users/forgot-password?token=${hashToken}</p>`,
+      <p>${config.DOMAIN_NAME}/users/reset-password?token=${hashToken}</p>`,
     };
     return transport.sendMail(mailOption);
   } catch (error) {

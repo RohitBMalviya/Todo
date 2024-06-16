@@ -37,6 +37,11 @@ export const signUp = PromiseHandle(async (request, response, _) => {
     role,
   });
   signUpUser.validateSync();
+  if(!signUpUser){
+    return response
+      .status(500)
+      .json(new ApiError(500, "Something went wrong while creating the todo."));
+  }
   const emailType = "VERIFY";
   await sendMail(signUpUser._id, signUpUser.email, emailType);
   const tocheckUserSignUp = await User.findById(signUpUser._id).select(

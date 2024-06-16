@@ -9,13 +9,14 @@ import {
 } from "react-router-dom";
 import store from "./store/store";
 import App from "./App.jsx";
-import Login from "./pages/login.jsx";
-import Register from "./pages/register.jsx";
 import "./global.css";
+import { Login, Register, Profile, YourTodo } from "./pages/index.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/your-todo" element={<YourTodo />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Register />} />
     </Route>

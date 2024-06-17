@@ -11,12 +11,27 @@ import store from "./store/store";
 import App from "./App.jsx";
 import "./global.css";
 import { Login, Register, Profile, YourTodo } from "./pages/index.jsx";
+import PrivateRoute from "./services/isauthorized.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<App />}>
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/your-todo" element={<YourTodo />} />
+    <Route path="/" element={<App />} s>
+      <Route
+        path="/profile"
+        element={
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/your-todo"
+        element={
+          <PrivateRoute>
+            <YourTodo />
+          </PrivateRoute>
+        }
+      />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Register />} />
     </Route>

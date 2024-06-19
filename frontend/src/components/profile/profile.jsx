@@ -1,27 +1,25 @@
 import { useEffect, useState } from "react";
 import IMG from "../../assets/images/profile.avif";
-import { getUserDetail } from "../../services/auth.service.js";
+import authService from "../../services/auth.service.js";
 import { Container } from "../index.jsx";
 
 export default function Profile() {
   const [userData, setUserData] = useState({});
   useEffect(() => {
     (async () => {
-      const response = await getUserDetail();
+      const response = await authService.getUserDetail();
       setUserData(response.data?.data);
     })();
   }, [setUserData]);
   return (
     <Container
-      className={
-        "flex justify-center items-center w-full h-full pt-20 bg-[#FDFFE2]"
-      }
+      className={"flex justify-center items-center w-full h-full bg-[#FDFFE2]"}
     >
       <div className="sm:flex hidden w-1/2 justify-center">
         <img src={IMG} alt="-" />
       </div>
       <div className="sm:w-1/2 w-full h-full bg-[#83B4FF] flex flex-col gap-4 items-center justify-center py-6">
-        <h2 className="text-4xl font-bold text-slate-50 mb-4">Profile</h2>
+        <h2 className="text-4xl font-bold text-slate-50 mt-32">Profile</h2>
         <form
           method="post"
           className="flex flex-col justify-center items-start border-2 border-[#5A72A0] rounded-3xl sm:p-8 p-4 sm:w-[70%] w-[90%]"
@@ -122,7 +120,7 @@ export default function Profile() {
             </button>
           </div>
         </form>
-        <div className="flex  justify-around items-center w-full">
+        <div className="flex  justify-around items-center w-full mb-16">
           <h3 className="sm:text-2xl text-xl font-medium ">
             To update password?
           </h3>

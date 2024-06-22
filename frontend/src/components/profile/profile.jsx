@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import IMG from "../../assets/images/profile.avif";
 import authService from "../../services/auth.service.js";
-import { Container } from "../index.jsx";
+import { Container, CustomButton, InputField, TextLabel } from "../index.jsx";
 
 export default function Profile() {
   const [userData, setUserData] = useState({});
@@ -15,78 +15,68 @@ export default function Profile() {
     <Container
       className={"flex justify-center items-center w-full h-full bg-[#FDFFE2]"}
     >
-      <div className="sm:flex hidden w-1/2 justify-center">
+      <div className="sm:flex hidden w-5/12 justify-center">
         <img src={IMG} alt="-" />
       </div>
-      <div className="sm:w-1/2 w-full h-full bg-[#83B4FF] flex flex-col gap-4 items-center justify-center py-6">
-        <h2 className="text-4xl font-bold text-slate-50 mt-32">Profile</h2>
+      <div className="sm:w-7/12 w-full h-full bg-[#83B4FF] flex flex-col gap-4 items-center justify-center py-6">
+        <h2 className="text-4xl font-bold text-slate-50 mt-24">Profile</h2>
         <form
           method="post"
           className="flex flex-col justify-center items-start border-2 border-[#5A72A0] rounded-3xl sm:p-8 p-4 sm:w-[70%] w-[90%]"
         >
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <label
-              className="sm:text-3xl text-2xl font-medium"
-              htmlFor="username"
-            >
-              Username :
-            </label>
-            <input
+            <TextLabel
+              htmlFor={"username"}
+              className={""}
+              text={"Username :"}
+            />
+            <InputField
               type="text"
               id="username"
-              className="rounded-xl h-12 xl:text-xl text-base p-2 font-medium xl:w-3/5 w-full"
+              className="xl:w-3/5 w-full "
               // value={userData.username}
               defaultValue={userData.username}
             />
           </div>
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <label className="sm:text-3xl text-2xl font-medium" htmlFor="email">
-              Email :
-            </label>
-            <input
+            <TextLabel htmlFor={"email"} className={""} text={"Email :"} />
+            <InputField
               type="email"
               id="email"
-              className="rounded-xl h-12 xl:text-xl text-base p-2 font-medium xl:w-3/5 w-full"
+              className="xl:w-3/5 w-full "
               // value={userData.email}
               defaultValue={userData.email}
             />
           </div>
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <label className="sm:text-3xl text-2xl font-medium" htmlFor="phone">
-              Mobile No. :
-            </label>
-            <div className="flex xl:flex-row flex-col gap-4 xl:w-3/5 w-full">
-              <input
-                type="text"
-                id="phone"
-                className="rounded-xl h-12 xl:text-xl text-base p-2 font-medium xl:w-3/5"
+            <TextLabel htmlFor={"phone"} className={""} text={"Mobile No:"} />
+            <div className="flex xl:flex-row flex-col xl:items-center items-start gap-4 xl:w-3/5 w-full">
+              <InputField type="text" id="phone" className="xl:w-4/5 " />
+              <CustomButton
+                className={"xl:w-[30%] w-2/5 p-2 h-10 xl:text-xl text-xl"}
+                text={"Verify"}
               />
-              <button className="w-2/5 rounded-xl bg-[#5A72A0] hover:bg-[#5885d8] p-2  xl:text-2xl text-xl font-semibold text-white">
-                verify
-              </button>
             </div>
           </div>
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <label
-              className="sm:text-3xl text-2xl font-medium"
-              htmlFor="birthdate"
-            >
-              Birth Date :
-            </label>
-            <input
+            <TextLabel
+              htmlFor={"birthdate"}
+              className={""}
+              text={"Birth Date :"}
+            />
+            <InputField
               type="date"
               id="birthdate"
-              className="rounded-xl h-12 xl:text-xl text-base p-2 font-medium xl:w-3/5 w-full"
+              className="xl:w-3/5 w-full "
               placeholder="Enter your birth date"
             />
           </div>
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <label
-              className="sm:text-3xl text-2xl font-medium"
-              htmlFor="gender"
-            >
-              Gender :
-            </label>
+            <TextLabel
+              htmlFor={"gender"}
+              className={"mt-6"}
+              text={"Gender :"}
+            />
             <select
               name="gender"
               id="gender"
@@ -99,12 +89,7 @@ export default function Profile() {
             </select>
           </div>
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <label
-              className="sm:text-3xl text-2xl font-medium"
-              htmlFor="address"
-            >
-              Address :
-            </label>
+            <TextLabel htmlFor={"address"} className={""} text={"Address :"} />
             <textarea
               name="address"
               id="address"
@@ -112,21 +97,24 @@ export default function Profile() {
             />
           </div>
           <div className="flex justify-end items-center w-full gap-5">
-            <button className=" rounded-xl bg-[#5A72A0] hover:bg-[#5885d8] p-2 px-4 xl:text-2xl text-xl font-semibold text-white">
-              clear
-            </button>
-            <button className=" rounded-xl bg-[#5A72A0] hover:bg-[#5885d8] p-2 px-4 xl:text-2xl text-xl font-semibold text-white">
-              save
-            </button>
+            <CustomButton
+              className={"px-4 py-2 xl:text-2xl text-xl"}
+              text={"Clear"}
+            />
+            <CustomButton
+              className={"px-4 py-2 xl:text-2xl text-xl"}
+              text={"Update"}
+            />
           </div>
         </form>
         <div className="flex  justify-around items-center w-full mb-16">
           <h3 className="sm:text-2xl text-xl font-medium ">
             To update password?
           </h3>
-          <button className="rounded-xl bg-[#5A72A0] hover:bg-[#5885d8] p-2 xl:px-4 xl:text-2xl text-xl font-semibold text-white">
-            Click here
-          </button>
+          <CustomButton
+            className={"xl:px-3 p-2 xl:text-2xl text-xl"}
+            text={"Click here"}
+          />
         </div>
       </div>
     </Container>

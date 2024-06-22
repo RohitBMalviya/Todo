@@ -15,20 +15,20 @@ import PrivateRoute from "./services/isauthorized.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<App />} s>
+    <Route element={<App />}>
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <YourTodo />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/profile"
         element={
           <PrivateRoute>
             <Profile />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/your-todo"
-        element={
-          <PrivateRoute>
-            <YourTodo />
           </PrivateRoute>
         }
       />

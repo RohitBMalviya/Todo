@@ -10,7 +10,7 @@ class AuthService {
         confirm_password,
         role,
       });
-      console.log(response);
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -18,7 +18,11 @@ class AuthService {
 
   async login({ email, password }) {
     try {
-      await axios.post("/api/v1/users/login", { email, password });
+      const response = await axios.post("/api/v1/users/login", {
+        email,
+        password,
+      });
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -26,7 +30,8 @@ class AuthService {
 
   async logout() {
     try {
-      await axios.post("/api/v1/users/logout");
+      const response = await axios.post("/api/v1/users/logout");
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -43,7 +48,10 @@ class AuthService {
 
   async updateUserDetail({ username }) {
     try {
-      await axios.patch("/api/v1/users/update-detail", { username });
+      const response = await axios.patch("/api/v1/users/update-detail", {
+        username,
+      });
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -51,11 +59,12 @@ class AuthService {
 
   async updatePassword({ password, newPassword, confirm_password }) {
     try {
-      await axios.patch("/api/v1/users/update-password", {
+      const response = await axios.patch("/api/v1/users/update-password", {
         password,
         newPassword,
         confirm_password,
       });
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -63,7 +72,8 @@ class AuthService {
 
   async deleteAccount() {
     try {
-      await axios.delete("/api/v1/users/delete-account");
+      const response = await axios.delete("/api/v1/users/delete-account");
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -71,7 +81,10 @@ class AuthService {
 
   async forgotPassword({ email }) {
     try {
-      await axios.post("/api/v1/users/forgot-password", { email });
+      const response = await axios.post("/api/v1/users/forgot-password", {
+        email,
+      });
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -79,10 +92,11 @@ class AuthService {
 
   async resetPassword({ password, confirm_password }) {
     try {
-      await axios.post("/api/v1/users/reset-passsword", {
+      const response = await axios.post("/api/v1/users/reset-passsword", {
         password,
         confirm_password,
       });
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -91,7 +105,8 @@ class AuthService {
   // Admin
   async getSingleUser() {
     try {
-      await axios.get("/api/v1/users/get-single-user/:id");
+      const response = await axios.get("/api/v1/users/get-single-user/:id");
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -99,7 +114,8 @@ class AuthService {
 
   async getAllUser() {
     try {
-      await axios.get("/api/v1/users/get-all-user/");
+      const response = await axios.get("/api/v1/users/get-all-user/");
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -107,7 +123,10 @@ class AuthService {
 
   async updateRole({ role }) {
     try {
-      await axios.patch("/api/v1/users/update-role/:id", { role });
+      const response = await axios.patch("/api/v1/users/update-role/:id", {
+        role,
+      });
+      return response;
     } catch (error) {
       console.error(error.message);
     }
@@ -115,7 +134,8 @@ class AuthService {
 
   async deleteUser({}) {
     try {
-      await axios.delete("/api/v1/users/delete-user/:id");
+      const response = await axios.delete("/api/v1/users/delete-user/:id");
+      return response;
     } catch (error) {
       console.error(error.message);
     }

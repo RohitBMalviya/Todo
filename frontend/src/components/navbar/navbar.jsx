@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "../../assets/images/todo.png";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/auth.service";
+import { InputField } from "../index";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -14,28 +15,24 @@ export default function Navbar() {
     }
   };
   return (
-    <nav className="flex fixed sm:justify-around justify-between items-center p-3 bg-[#5A72A0] w-full">
-      <div className="flex flex-1 items-center justify-around">
-        <div className="flex bg-white rounded-2xl p-1 px-4 ">
-          <img src={Logo} alt="logo" className="w-10" />
-          <h1 className="text-4xl font-bold ">Todo</h1>
-        </div>
-        <div className="md:flex hidden">
-          <input
-            type="search"
-            name="search"
-            id="search"
-            className="rounded-xl h-12 w-[30rem] text-3xl font-semibold px-4"
-          />
-        </div>
+    <nav className="flex fixed sm:justify-around justify-between  items-center p-3 bg-[#5A72A0] w-full">
+      <Link to={"/"} className="flex bg-white rounded-2xl p-1 px-4 ">
+        <img src={Logo} alt="logo" className="w-10" />
+        <h1 className="text-4xl font-bold ">Todo</h1>
+      </Link>
+      <div className="md:flex hidden w-[32rem]">
+        <InputField
+          type="search"
+          name="search"
+          id="search"
+          placeholder="Search Todo"
+          className="text-3xl px-4"
+        />
       </div>
-      <div className="xl:flex flex-1 hidden justify-center">
+      <div className="xl:flex hidden justify-center">
         <menu className="flex gap-10 text-2xl text-white font-medium">
           <li>
             <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to={"/your-todo"}>Your Todo</Link>
           </li>
           <li>
             <Link to={"/profile"}>Profile</Link>

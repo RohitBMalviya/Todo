@@ -1,4 +1,4 @@
-import { Container } from "../index.jsx";
+import { Container, CustomButton, InputField, TextLabel } from "../index.jsx";
 import IMG from "../../assets/images/login.webp";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -18,11 +18,13 @@ export default function Login() {
   const handleSumbit = async (event) => {
     try {
       event.preventDefault();
-      await authService.login({
+      const response = await authService.login({
         email: UserForm.email,
         password: UserForm.password,
       });
-      navigate("/");
+      if (response) {
+        navigate("/");
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -35,50 +37,46 @@ export default function Login() {
         <img src={IMG} alt="-" />
       </div>
       <div className="sm:w-1/2 w-full h-full bg-[#83B4FF] flex flex-col gap-2 items-center justify-center">
-        <h2 className="text-4xl font-bold text-slate-50 mt-32">Login</h2>
+        <h2 className="text-4xl font-bold text-slate-50 mt-28">Login</h2>
         <h3 className="text-2xl font-bold text-slate-50 mb-4">
           Welcome Back !
         </h3>
         <form
           method="post"
-          className="flex flex-col justify-center items-start border-2 border-[#5A72A0] rounded-3xl sm:p-8 p-4 xl:w-[60%] w-[90%] mb-12"
+          className="flex flex-col justify-center items-start border-2 border-[#5A72A0] rounded-3xl sm:p-8 p-4 xl:w-[60%] w-[90%] mb-24"
           onSubmit={handleSumbit}
         >
-          <label htmlFor="email" className="sm:text-3xl text-2xl font-medium">
-            Email:
-          </label>
-          <input
-            className="rounded-xl h-12 w-full sm:text-xl text-base p-2 font-medium mt-3"
+          <TextLabel htmlFor={"email"} className={""} text={" Email :"} />
+          <InputField
+            className="mt-3"
             name="email"
             type="email"
             id="email"
+            placeholder="Enter Your Email"
             value={UserForm.email}
             onChange={handleInputChange}
-            required
           />
-          <label
-            htmlFor="password"
-            className="sm:text-3xl text-2xl font-medium mt-6"
-          >
-            Password:
-          </label>
+          <TextLabel
+            htmlFor={"password"}
+            className={"mt-6"}
+            text={" Password :"}
+          />
           <div className="w-full relative">
-            <input
-              className="rounded-xl h-12 w-full sm:text-xl text-base p-2 font-medium mt-3 "
+            <InputField
+              className="mt-3"
               name="password"
-              type={viewPassword ? "password" : "text"}
               id="password"
+              placeholder="Enter Your Password"
+              type={viewPassword ? "password" : "text"}
               value={UserForm.password}
               onChange={handleInputChange}
-              required
             />
-            <button
+            <CustomButton
+              className={"absolute right-1 top-4 p-2 xl:text-base text-sm"}
+              text={viewPassword ? "view" : "hide"}
               type="button"
               onClick={() => setViewPassword(!viewPassword)}
-              className="absolute right-1 top-4 rounded-xl bg-[#5A72A0] hover:bg-[#5885d8] p-2 font-semibold text-white"
-            >
-              {viewPassword ? "view" : "hide"}
-            </button>
+            />
           </div>
           <div className="flex justify-between items-center w-full mt-6">
             <span className="flex items-center">
@@ -95,14 +93,13 @@ export default function Login() {
               ForgotPassword?
             </Link>
           </div>
-          <button
+          <CustomButton
+            className={"w-full p-2 sm:text-2xl text-xl mt-6"}
+            text={"Login"}
             type="submit"
-            className="w-full rounded-xl bg-[#5A72A0] hover:bg-[#5885d8] p-2 sm:text-2xl text-xl font-semibold text-white mt-6"
-          >
-            Login
-          </button>
+          />
           <p className="lg:text-xl md:text-base text-sm font-medium mt-6">
-            Don't have an account?
+            Don't have an account?{" "}
             <Link to="/signup" className="text-white">
               Signup
             </Link>

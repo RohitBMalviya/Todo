@@ -53,7 +53,7 @@ export default function Profile() {
             <div className="flex xl:flex-row flex-col xl:items-center items-start gap-4 xl:w-3/5 w-full">
               <InputField type="text" id="phone" className="xl:w-4/5 " />
               <CustomButton
-                className={"xl:w-[30%] w-2/5 p-2 h-10 xl:text-xl text-xl"}
+                className={"xl:w-[30%] w-2/5 h-12 xl:text-2xl text-xl"}
                 text={"Verify"}
               />
             </div>
@@ -112,7 +112,7 @@ export default function Profile() {
             To update password?
           </h3>
           <CustomButton
-            className={"xl:px-3 p-2 xl:text-2xl text-xl"}
+            className={"xl:px-3 p-2 xl:text-xl text-xl"}
             text={"Click here"}
           />
         </div>

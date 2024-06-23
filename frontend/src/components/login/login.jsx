@@ -3,6 +3,8 @@ import IMG from "../../assets/images/login.webp";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import authService from "../../services/auth.service.js";
+import { MdOutlineVisibility } from "react-icons/md";
+import { MdOutlineVisibilityOff } from "react-icons/md";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -23,7 +25,16 @@ export default function Login() {
         password: UserForm.password,
       });
       if (response) {
-        navigate("/");
+        localStorage.setItem("token", true);
+        setuserForm(UserForm);
+        const indentUrl = localStorage.getItem("indentUrl");
+        console.log(indentUrl);
+        if (indentUrl) {
+          navigate(`${indentUrl}`);
+          localStorage.removeItem("indentUrl");
+        } else {
+          navigate("/");
+        }
       }
     } catch (error) {
       console.error(error.message);
@@ -37,7 +48,7 @@ export default function Login() {
         <img src={IMG} alt="-" />
       </div>
       <div className="sm:w-1/2 w-full h-full bg-[#83B4FF] flex flex-col gap-2 items-center justify-center">
-        <h2 className="text-4xl font-bold text-slate-50 mt-28">Login</h2>
+        <h2 className="text-4xl font-bold text-slate-50 mt-[6.75rem]">Login</h2>
         <h3 className="text-2xl font-bold text-slate-50 mb-4">
           Welcome Back !
         </h3>
@@ -46,7 +57,7 @@ export default function Login() {
           className="flex flex-col justify-center items-start border-2 border-[#5A72A0] rounded-3xl sm:p-8 p-4 xl:w-[60%] w-[90%] mb-24"
           onSubmit={handleSumbit}
         >
-          <TextLabel htmlFor={"email"} className={""} text={" Email :"} />
+          <TextLabel htmlFor={"email"} className={""} text={"Email :"} />
           <InputField
             className="mt-3"
             name="email"
@@ -72,8 +83,14 @@ export default function Login() {
               onChange={handleInputChange}
             />
             <CustomButton
-              className={"absolute right-1 top-4 p-2 xl:text-base text-sm"}
-              text={viewPassword ? "view" : "hide"}
+              className={"absolute right-1 top-5 p-2 xl:text-base text-sm"}
+              text={
+                viewPassword ? (
+                  <MdOutlineVisibilityOff />
+                ) : (
+                  <MdOutlineVisibility />
+                )
+              }
               type="button"
               onClick={() => setViewPassword(!viewPassword)}
             />

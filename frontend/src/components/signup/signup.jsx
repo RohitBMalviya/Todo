@@ -3,6 +3,8 @@ import IMG from "../../assets/images/login.webp";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import authService from "../../services/auth.service.js";
+import { MdOutlineVisibility } from "react-icons/md";
+import { MdOutlineVisibilityOff } from "react-icons/md";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -90,8 +92,14 @@ export default function Register() {
             />
 
             <CustomButton
-              className={"absolute right-1 top-4 p-2 xl:text-base text-sm"}
-              text={viewPassword ? "view" : "hide"}
+              className={"absolute right-1 top-5 p-2 xl:text-base text-sm"}
+              text={
+                viewPassword ? (
+                  <MdOutlineVisibilityOff />
+                ) : (
+                  <MdOutlineVisibility />
+                )
+              }
               type="button"
               onClick={() => setViewPassword(!viewPassword)}
             />
@@ -115,8 +123,14 @@ export default function Register() {
             />
 
             <CustomButton
-              className={"absolute right-1 top-4 p-2 xl:text-base text-sm"}
-              text={viewPasswordConfirm ? "view" : "hide"}
+              className={"absolute right-1 top-5 p-2 xl:text-base text-sm"}
+              text={
+                viewPasswordConfirm ? (
+                  <MdOutlineVisibilityOff />
+                ) : (
+                  <MdOutlineVisibility />
+                )
+              }
               type="button"
               onClick={() => setViewPasswordConfirm(!viewPasswordConfirm)}
             />

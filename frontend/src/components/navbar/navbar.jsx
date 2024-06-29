@@ -23,7 +23,7 @@ export default function Navbar() {
   };
   const token = localStorage.getItem("token");
   return (
-    <div className="relative">
+    <div className="relative z-10">
       <nav className="flex fixed sm:justify-around justify-between items-center p-3 bg-[#5A72A0] w-full">
         <Link to={"/"} className="flex bg-white rounded-2xl p-1 px-4 ">
           <img src={Logo} alt="logo" className="w-10" />

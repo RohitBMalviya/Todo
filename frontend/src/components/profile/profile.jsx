@@ -51,7 +51,7 @@ export default function Profile() {
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
             <TextLabel htmlFor={"phone"} className={""} text={"Mobile No:"} />
             <div className="flex xl:flex-row flex-col xl:items-center items-start gap-4 xl:w-3/5 w-full">
-              <InputField type="text" id="phone" className="xl:w-4/5 " />
+              <InputField type="number" id="phone" className="xl:w-4/5 " />
               <CustomButton
                 className={"xl:w-[30%] w-2/5 h-12 xl:text-2xl text-xl"}
                 text={"Verify"}

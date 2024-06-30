@@ -33,6 +33,7 @@ class AuthService {
         email,
         password,
       });
+      console.log(response);
       return response;
     } catch (error) {
       console.error(error.message);
@@ -57,10 +58,13 @@ class AuthService {
     }
   }
 
-  async updateUserDetail({ username }) {
+  async updateUserDetail({ username, gender, address, birthDay }) {
     try {
       const response = await axios.patch("/api/v1/users/update-detail", {
         username,
+        gender,
+        address,
+        birthDay,
       });
       return response;
     } catch (error) {
@@ -74,6 +78,17 @@ class AuthService {
         password,
         newpassword,
         confirm_password,
+      });
+      return response;
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  async updateEmail({ email }) {
+    try {
+      const response = await axios.patch("/api/v1/users/update-email", {
+        email,
       });
       return response;
     } catch (error) {

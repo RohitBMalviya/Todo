@@ -4,17 +4,23 @@ import { auth, admin } from "../middleware/index.js";
 
 const userRouter = Router();
 
-userRouter.route("/signup").post(UserController.signUp);
 userRouter.route("/verify-user").get(UserController.verifyUser);
+userRouter.route("/get-detail").get(auth, UserController.getUserDetail);
+userRouter.route("/signup").post(UserController.signUp);
 userRouter.route("/login").post(UserController.login);
 userRouter.route("/logout").post(auth, UserController.logout);
-userRouter.route("/get-detail").get(auth, UserController.getUserDetail);
+userRouter
+  .route("/verify-phone-number")
+  .post(auth, UserController.verifyPhoneNumber);
+userRouter.route("/refresh-token").post(UserController.refreshToken);
 userRouter.route("/update-detail").patch(auth, UserController.updateUserDetail);
 userRouter.route("/update-password").patch(auth, UserController.updatePassword);
+userRouter
+  .route("/update-email")
+  .patch(auth, UserController.updateAndVerifyEmail);
 userRouter.route("/delete-account").delete(auth, UserController.deleteAccount);
 userRouter.route("/forgot-password").post(UserController.forgotPassword);
 userRouter.route("/reset-password").patch(UserController.resetPassword);
-userRouter.route("/refresh-token").patch(UserController.refreshToken);
 
 // Admin
 userRouter

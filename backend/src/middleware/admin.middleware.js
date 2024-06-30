@@ -3,7 +3,7 @@ import { ApiError, PromiseHandle, config } from "../utils/index.js";
 
 export default function admin(request, _, next) {
   if (request.user.role !== "admin") {
-    throw new ApiError(404, "Not authorized to access only admin can access.");
+    throw new ApiError(401, "Not authorized to access only admin can access.");
   }
   next();
 }

@@ -1,10 +1,12 @@
 import { User } from "../models/index.js";
+import JWT from "jsonwebtoken";
 import {
   ApiError,
   ApiResponse,
   PromiseHandle,
   generateAccessTokenRefreshToken,
   sendMail,
+  config,
 } from "../utils/index.js";
 
 export const signUp = PromiseHandle(async (request, response, _) => {
@@ -27,7 +29,7 @@ export const signUp = PromiseHandle(async (request, response, _) => {
     username: username,
   });
   if (userAlreadyExists) {
-    return response.status(406).json(new ApiError(406, "User already exists."));
+    return response.status(400).json(new ApiError(400, "User already exists."));
   }
   const signUpUser = await User.create({
     username,
@@ -37,7 +39,7 @@ export const signUp = PromiseHandle(async (request, response, _) => {
     role,
   });
   signUpUser.validateSync();
-  if(!signUpUser){
+  if (!signUpUser) {
     return response
       .status(500)
       .json(new ApiError(500, "Something went wrong while creating the todo."));
@@ -49,8 +51,8 @@ export const signUp = PromiseHandle(async (request, response, _) => {
   );
   if (!tocheckUserSignUp) {
     return response
-      .status(400)
-      .json(new ApiError(400, "User signUp data is not store in database."));
+      .status(406)
+      .json(new ApiError(406, "User signUp data is not store in database."));
   }
   return response
     .status(201)
@@ -131,13 +133,19 @@ export const login = PromiseHandle(async (request, response, _) => {
     .status(200)
     .cookie("accessToken", accessToken, {
       ...options,
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      expires: new Date(Date.now() + 30 * 60 * 1000),
     })
     .cookie("refreshToken", refreshToken, {
       ...options,
-      expires: new Date(Date.now() + 72 * 60 * 60 * 1000),
+      expires: new Date(Date.now() + 60 * 60 * 1000),
     })
-    .json(new ApiResponse(200, loginUser, "User login successfully. !!!"));
+    .json(
+      new ApiResponse(
+        200,
+        { loginUser, accessToken, refreshToken },
+        "User login successfully. !!!"
+      )
+    );
 });
 
 export const logout = PromiseHandle(async (request, response, _) => {
@@ -158,7 +166,7 @@ export const logout = PromiseHandle(async (request, response, _) => {
 
 export const getUserDetail = PromiseHandle(async (request, response, _) => {
   const userId = request.user;
-  const user = await User.findById(userId._id);
+  const user = await User.findById(userId._id).select("-password");
   if (!user) {
     return response.status(404).json(new ApiError(404, "User not found."));
   }
@@ -168,12 +176,17 @@ export const getUserDetail = PromiseHandle(async (request, response, _) => {
 });
 
 export const updateUserDetail = PromiseHandle(async (request, response, _) => {
-  const { username } = request.body;
+  const { username, gender, address, birthDay } = request.body;
   const userId = request.user;
   const user = await User.findByIdAndUpdate(
     userId._id,
     {
-      $set: { username: username },
+      $set: {
+        username: username,
+        gender: gender,
+        address: address,
+        birthDay: birthDay,
+      },
     },
     { new: true }
   ).select("-password");
@@ -260,10 +273,87 @@ export const deleteAccount = PromiseHandle(async (request, response, _) => {
   await User.findByIdAndDelete(userId._id);
   return response
     .status(200)
+    .clearCookie("accessToken")
+    .clearCookie("refreshToken")
     .json(new ApiResponse(200, {}, "User account deleted successfully. !!!"));
 });
 
-export const refreshToken = PromiseHandle(async (request, response, _) => {});
+export const updateAndVerifyEmail = PromiseHandle(
+  async (request, response, _) => {
+    const { email } = request.body;
+    const userId = request.user._id;
+    const user = await User.findById(userId);
+    const emailType = "VERIFY";
+    await sendMail(user._id, email, emailType);
+    user.email = email;
+    user.isVerified = false;
+    await user.save({ validateBeforeSave: false });
+    return response
+      .status(200)
+      .json(
+        new ApiResponse(200, {}, "User email address updated successfully. !!!")
+      );
+  }
+);
+
+export const refreshToken = PromiseHandle(async (request, response, _) => {
+  const incomingToken =
+    request.cookies?.refreshToken ||
+    request.body.refreshToken ||
+    request.header("Authorization")?.replace("Bearer", "");
+  if (!incomingToken) {
+    return response
+      .status(401)
+      .json(new ApiError(401, "UnAuthorized request."));
+  }
+  try {
+    const decodeToken = JWT.verify(incomingToken, config.REFRESH_TOKEN);
+    const user = await User.findById(decodeToken?._id).select(
+      "-password +refreshToken"
+    );
+    if (!user) {
+      return response.status(404).json(new ApiError(404, "User not found."));
+    }
+    if (incomingToken !== user?.refreshToken) {
+      return response
+        .status(401)
+        .json(new ApiError(401, "Refresh token is used or expired."));
+    }
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+    const { accessToken, newRefreshToken } =
+      await generateAccessTokenRefreshToken(user._id);
+    return response
+      .status(200)
+      .status(200)
+      .cookie("accessToken", accessToken, {
+        ...options,
+        expires: new Date(Date.now() + 30 * 60 * 1000),
+      })
+      .cookie("newRefreshToken", newRefreshToken, {
+        ...options,
+        expires: new Date(Date.now() + 60 * 60 * 1000),
+      })
+      .json(
+        new ApiResponse(
+          200,
+          { accessToken, refreshToken: newRefreshToken },
+          "Access token refresh successfully. !!!"
+        )
+      );
+  } catch (error) {
+    return response
+      .status(401)
+      .json(new ApiError(401, error?.message || "Invalid refresh Token."));
+  }
+});
+
+// Todo For Phone Number Verification
+export const verifyPhoneNumber = PromiseHandle(async (request, response, _) => {
+  return response.send("verifyPhoneNumber");
+});
 
 // Admin
 

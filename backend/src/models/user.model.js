@@ -106,6 +106,25 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Todo",
     },
+    phoneNumber: {
+      type: Number,
+      unique: true,
+      validate: {
+        validator: function (phone) {
+          return /\B\+91 [0-9]{10}\b/.test(phone);
+        },
+        message: "Invalid phone number formate",
+      },
+    },
+    gender: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    birthDay: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

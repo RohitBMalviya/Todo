@@ -25,7 +25,7 @@ export default function Login() {
         password: UserForm.password,
       });
       if (response) {
-        localStorage.setItem("token", true);
+        localStorage.setItem("token", response.data?.data.accessToken);
         setuserForm(UserForm);
         const indentUrl = localStorage.getItem("indentUrl");
         console.log(indentUrl);
@@ -57,7 +57,7 @@ export default function Login() {
           className="flex flex-col justify-center items-start border-2 border-[#5A72A0] rounded-3xl sm:p-8 p-4 xl:w-[60%] w-[90%] mb-24"
           onSubmit={handleSumbit}
         >
-          <TextLabel htmlFor={"email"} className={""} text={"Email :"} />
+          <TextLabel htmlFor={"email"} text={"Email :"} />
           <InputField
             className="mt-3"
             name="email"

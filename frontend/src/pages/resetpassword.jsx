@@ -1,4 +1,3 @@
-import React from "react";
 import { ResetPasswordComponent } from "../components/index.jsx";
 
 export default function ResetPassword() {

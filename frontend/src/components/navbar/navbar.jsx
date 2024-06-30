@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Logo from "../../assets/images/todo.png";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/auth.service";

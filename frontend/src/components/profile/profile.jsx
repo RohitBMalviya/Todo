@@ -9,24 +9,60 @@ import {
   TextLabel,
 } from "../index.jsx";
 import { useNavigate } from "react-router-dom";
+import { FaPen } from "react-icons/fa6";
 
 export default function Profile() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
     username: "",
     email: "",
-    phone: "",
-    birthdate: "",
+    birthDay: "",
     gender: "",
     address: "",
   });
+  const [updateEmail, setUpdateEmail] = useState("");
+  const [updateEmailEnable, setUpdateEmailEnable] = useState(true);
   const [updatePassword, setUpdatePassword] = useState(false);
   useEffect(() => {
     (async () => {
       const response = await authService.getUserDetail();
       setUserData(response.data?.data);
+      setUpdateEmail(response.data?.data.email);
     })();
-  }, [setUserData]);
+  }, [setUserData, setUpdateEmail]);
+  const handleInputField = (event) => {
+    const { name, value } = event.target;
+    setUserData({ ...userData, [name]: value });
+  };
+  const handleUpdateEmailSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const response = await authService.updateEmail({ email: updateEmail });
+      if (response) {
+        alert("Email Updated Verify email check");
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  const handleUpdateSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const response = await authService.updateUserDetail({
+        username: userData.username,
+        gender: userData.gender,
+        address: userData.address,
+        birthDay: userData.birthDay,
+      });
+      if (response) {
+        alert("User detail Update");
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   const handleDelete = async (event) => {
     try {
       event.preventDefault();
@@ -49,35 +85,46 @@ export default function Profile() {
       <div className="sm:w-7/12 w-full h-full bg-[#83B4FF] flex flex-col gap-4 items-center justify-center py-6">
         <h2 className="text-4xl font-bold text-slate-50 mt-24">Profile</h2>
         <form
-          method="post"
           className="flex flex-col justify-center items-start border-2 border-[#5A72A0] rounded-3xl sm:p-8 p-4 sm:w-[70%] w-[90%]"
+          onSubmit={
+            updateEmailEnable ? handleUpdateSubmit : handleUpdateEmailSubmit
+          }
         >
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <TextLabel
-              htmlFor={"username"}
-              className={""}
-              text={"Username :"}
-            />
+            <TextLabel htmlFor={"username"} text={"Username :"} />
             <InputField
               type="text"
               id="username"
-              className="xl:w-3/5 w-full "
-              // value={userData.username}
-              defaultValue={userData.username}
+              className="xl:w-3/5 w-full"
+              value={userData.username}
+              onChange={handleInputField}
+              disabled={!updateEmailEnable}
             />
           </div>
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <TextLabel htmlFor={"email"} className={""} text={"Email :"} />
+            <span className="flex justify-between w-full">
+              <TextLabel htmlFor={"email"} text={"Email :"} />
+              <CustomButton
+                type="button"
+                text={<FaPen />}
+                className={"p-2"}
+                onClick={() => setUpdateEmailEnable(!updateEmailEnable)}
+              />
+            </span>
             <InputField
               type="email"
               id="email"
               className="xl:w-3/5 w-full "
-              // value={userData.email}
-              defaultValue={userData.email}
+              value={updateEmail}
+              onChange={(event) => {
+                setUpdateEmail(event.target.value);
+              }}
+              disabled={updateEmailEnable}
             />
           </div>
-          <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <TextLabel htmlFor={"phone"} className={""} text={"Mobile No:"} />
+          {/* // Todo Phone Number */}
+          {/* <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
+            <TextLabel htmlFor={"phone"}  text={"Mobile No:"} />
             <div className="flex xl:flex-row flex-col xl:items-center items-start gap-4 xl:w-3/5 w-full">
               <InputField type="number" id="phone" className="xl:w-4/5 " />
               <CustomButton
@@ -85,18 +132,18 @@ export default function Profile() {
                 text={"Verify"}
               />
             </div>
-          </div>
+          </div> */}
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <TextLabel
-              htmlFor={"birthdate"}
-              className={""}
-              text={"Birth Date :"}
-            />
+            <TextLabel htmlFor={"birthDay"} text={"Birth Date :"} />
             <InputField
               type="date"
-              id="birthdate"
+              id="birthDay"
+              name="birthDay"
               className="xl:w-3/5 w-full "
               placeholder="Enter your birth date"
+              value={userData.birthDay}
+              onChange={handleInputField}
+              disabled={!updateEmailEnable}
             />
           </div>
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
@@ -108,7 +155,10 @@ export default function Profile() {
             <select
               name="gender"
               id="gender"
-              className="rounded-xl h-12 xl:text-xl text-base p-2 font-medium xl:w-3/5 w-full"
+              className="rounded-xl h-12 xl:text-xl text-lg p-2 font-semibold xl:w-3/5 w-full"
+              value={userData.gender}
+              onChange={handleInputField}
+              disabled={!updateEmailEnable}
             >
               <option value="default">------</option>
               <option value="male">Male</option>
@@ -117,11 +167,14 @@ export default function Profile() {
             </select>
           </div>
           <div className="flex xl:flex-row flex-col justify-between xl:items-center items-start gap-4 w-full mb-6">
-            <TextLabel htmlFor={"address"} className={""} text={"Address :"} />
+            <TextLabel htmlFor={"address"} text={"Address :"} />
             <textarea
               name="address"
               id="address"
-              className="rounded-xl xl:text-xl text-base p-2 font-medium xl:w-3/5 w-full h-32"
+              className="rounded-xl xl:text-xl text-lg p-2 font-semibold xl:w-3/5 w-full h-32"
+              value={userData.address}
+              onChange={handleInputField}
+              disabled={!updateEmailEnable}
             />
           </div>
           <div className="flex justify-end items-center w-full gap-5">

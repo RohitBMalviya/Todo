@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function CustomButton({ className, text, ...props }) {
   return (
     <button

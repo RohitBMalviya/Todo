@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function TextLabel({ className, htmlFor, text }) {
   return (
     <label

@@ -104,7 +104,7 @@ export default function Login() {
               </span>
             </span>
             <Link
-              to="#"
+              to="/forgot-password"
               className="lg:text-xl md:text-base text-sm font-medium text-white"
             >
               ForgotPassword?

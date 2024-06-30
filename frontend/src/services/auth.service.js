@@ -16,6 +16,17 @@ class AuthService {
     }
   }
 
+  async verifyUser({ token }) {
+    try {
+      const response = await axios.get(
+        `/api/v1/users/verify-user?token=${token}`
+      );
+      return response;
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
   async login({ email, password }) {
     try {
       const response = await axios.post("/api/v1/users/login", {
@@ -57,11 +68,11 @@ class AuthService {
     }
   }
 
-  async updatePassword({ password, newPassword, confirm_password }) {
+  async updatePassword({ password, newpassword, confirm_password }) {
     try {
       const response = await axios.patch("/api/v1/users/update-password", {
         password,
-        newPassword,
+        newpassword,
         confirm_password,
       });
       return response;
@@ -90,12 +101,15 @@ class AuthService {
     }
   }
 
-  async resetPassword({ password, confirm_password }) {
+  async resetPassword({ password, confirm_password, token }) {
     try {
-      const response = await axios.post("/api/v1/users/reset-passsword", {
-        password,
-        confirm_password,
-      });
+      const response = await axios.patch(
+        `/api/v1/users/reset-password?token=${token}`,
+        {
+          password,
+          confirm_password,
+        }
+      );
       return response;
     } catch (error) {
       console.error(error.message);

@@ -10,9 +10,16 @@ import {
 import store from "./store/store";
 import App from "./App.jsx";
 import "./global.css";
-import { Login, Register, Profile, YourTodo } from "./pages/index.jsx";
+import {
+  Login,
+  Register,
+  Profile,
+  YourTodo,
+  ForgotPassword,
+  ResetPassword,
+  VerifyUser,
+} from "./pages/index.jsx";
 import PrivateRoute from "./services/isauthorized.jsx";
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<App />}>
@@ -32,8 +39,11 @@ const router = createBrowserRouter(
           </PrivateRoute>
         }
       />
-      <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Register />} />
+      <Route path="/users/verify-user" element={<VerifyUser />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/users/reset-password" element={<ResetPassword />} />
     </Route>
   )
 );

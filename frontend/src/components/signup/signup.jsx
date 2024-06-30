@@ -8,7 +8,7 @@ import { MdOutlineVisibilityOff } from "react-icons/md";
 
 export default function Register() {
   const navigate = useNavigate();
-  const [UserForm, setuserForm] = useState({
+  const [userForm, setUserForm] = useState({
     username: "",
     email: "",
     password: "",
@@ -18,19 +18,19 @@ export default function Register() {
   const [viewPasswordConfirm, setViewPasswordConfirm] = useState(true);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setuserForm({ ...UserForm, [name]: value });
+    setUserForm({ ...userForm, [name]: value });
   };
   const handleSumbit = async (event) => {
     try {
       event.preventDefault();
       const response = await authService.signUp({
-        username: UserForm.username,
-        email: UserForm.email,
-        password: UserForm.password,
-        confirm_password: UserForm.confirm_password,
+        username: userForm.username,
+        email: userForm.email,
+        password: userForm.password,
+        confirm_password: userForm.confirm_password,
       });
       if (response) {
-        navigate("/login");
+        alert("Check Mail");
       }
     } catch (error) {
       console.error(error.message);
@@ -60,7 +60,7 @@ export default function Register() {
             name="username"
             type="text"
             id="username"
-            value={UserForm.username}
+            value={userForm.username}
             onChange={handleInputChange}
           />
           <TextLabel htmlFor={"email"} className={"mt-6"} text={"Email :"} />
@@ -70,7 +70,7 @@ export default function Register() {
             name="email"
             type="email"
             id="email"
-            value={UserForm.email}
+            value={userForm.email}
             onChange={handleInputChange}
           />
           <TextLabel
@@ -85,7 +85,7 @@ export default function Register() {
               name="password"
               type={viewPassword ? "password" : "text"}
               id="password"
-              value={UserForm.password}
+              value={userForm.password}
               onChange={handleInputChange}
               pattern="^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$"
               title="Must contain at least one number and one uppercase and lowercase letter, special character, and at least 8 or more characters"
@@ -116,7 +116,7 @@ export default function Register() {
               name="confirm_password"
               type={viewPasswordConfirm ? "password" : "text"}
               id="confirm_password"
-              value={UserForm.confirm_password}
+              value={userForm.confirm_password}
               onChange={handleInputChange}
               pattern="^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$"
               title="Must contain at least one number ,one uppercase, one lowercase letter, special character, and at least 8 or more characters"
@@ -142,7 +142,7 @@ export default function Register() {
           />
 
           <p className="lg:text-xl md:text-base text-sm font-medium mt-6">
-            Already have an account?
+            Already have an account?{" "}
             <Link to="/login" className="text-white">
               Login
             </Link>

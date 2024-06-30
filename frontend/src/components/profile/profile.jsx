@@ -1,16 +1,44 @@
 import { useEffect, useState } from "react";
 import IMG from "../../assets/images/profile.avif";
 import authService from "../../services/auth.service.js";
-import { Container, CustomButton, InputField, TextLabel } from "../index.jsx";
+import {
+  Container,
+  CustomButton,
+  UpdatePassword,
+  InputField,
+  TextLabel,
+} from "../index.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
-  const [userData, setUserData] = useState({});
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState({
+    username: "",
+    email: "",
+    phone: "",
+    birthdate: "",
+    gender: "",
+    address: "",
+  });
+  const [updatePassword, setUpdatePassword] = useState(false);
   useEffect(() => {
     (async () => {
       const response = await authService.getUserDetail();
       setUserData(response.data?.data);
     })();
   }, [setUserData]);
+  const handleDelete = async (event) => {
+    try {
+      event.preventDefault();
+      const response = await authService.deleteAccount();
+      if (response) {
+        navigate("/signup");
+        localStorage.removeItem("token");
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   return (
     <Container
       className={"flex justify-center items-center w-full h-full bg-[#FDFFE2]"}
@@ -53,7 +81,7 @@ export default function Profile() {
             <div className="flex xl:flex-row flex-col xl:items-center items-start gap-4 xl:w-3/5 w-full">
               <InputField type="number" id="phone" className="xl:w-4/5 " />
               <CustomButton
-                className={"xl:w-[30%] w-2/5 h-12 xl:text-2xl text-xl"}
+                className={"xl:w-[30%] w-2/5 h-12 xl:text-2xl text-xl px-2"}
                 text={"Verify"}
               />
             </div>
@@ -99,23 +127,40 @@ export default function Profile() {
           <div className="flex justify-end items-center w-full gap-5">
             <CustomButton
               className={"px-4 py-2 xl:text-2xl text-xl"}
-              text={"Clear"}
-            />
-            <CustomButton
-              className={"px-4 py-2 xl:text-2xl text-xl"}
-              text={"Update"}
+              text={"Save"}
             />
           </div>
         </form>
-        <div className="flex  justify-around items-center w-full mb-16">
-          <h3 className="sm:text-2xl text-xl font-medium ">
-            To update password?
-          </h3>
-          <CustomButton
-            className={"xl:px-3 p-2 xl:text-xl text-xl"}
-            text={"Click here"}
-          />
+        <div className="flex  flex-col gap-4 justify-around sm:w-[70%] w-[90%]">
+          <div className="flex justify-between">
+            <h3 className="sm:text-2xl text-xl font-medium">
+              To update password?
+            </h3>
+            <CustomButton
+              className={"xl:px-3 p-2 xl:text-xl text-xl"}
+              text={"Update Password"}
+              onClick={() => {
+                setUpdatePassword(!updatePassword);
+              }}
+            />
+          </div>
+          <div className="flex justify-between">
+            <h3 className="sm:text-2xl text-xl font-medium">Delete Account?</h3>
+            <CustomButton
+              className={"xl:px-3 p-2 xl:text-xl text-xl"}
+              text={"Delete Account"}
+              onClick={handleDelete}
+            />
+          </div>
         </div>
+        {updatePassword && (
+          <div className="absolute top-[4.5rem] left-0 w-full h-full">
+            <UpdatePassword
+              updatePassword={updatePassword}
+              setUpdatePassword={setUpdatePassword}
+            />
+          </div>
+        )}
       </div>
     </Container>
   );

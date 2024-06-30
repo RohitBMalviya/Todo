@@ -9,6 +9,10 @@ import CustomButton from "./button/button.jsx";
 import InputField from "./inputfield/inputfield.jsx";
 import TextLabel from "./label/textlabel.jsx";
 import CreateTodo from "./createtodo/createtodo.jsx";
+import ForgotPassword from "./forgotpassword/forgotpassword.jsx";
+import ResetPassword from "./resetpassword/resetpassword.jsx";
+import VerifyUser from "./verifyuser/verifyuser.jsx";
+import UpdatePassword from "./updatepassword/updatepassword.jsx";
 export {
   Login as LoginComponent,
   Register as RegisterComponent,
@@ -21,4 +25,8 @@ export {
   InputField,
   TextLabel,
   CreateTodo,
+  ForgotPassword as ForgotPasswordComponent,
+  ResetPassword as ResetPasswordComponent,
+  VerifyUser as VerifyUserComponent,
+  UpdatePassword,
 };
